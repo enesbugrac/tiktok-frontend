@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import axios from "./axios";
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import Video from "./Video.js";
 
 function App() {
+  const [videos, setVideos] = useState([]);
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await axios.get("/v2/posts");
+      setVideos(response.data);
+      return response;
+    }
+    fetchPosts();
+  }, []);
+  console.log(videos);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <div className="app__videos">
+        {videos.map((video) => (
+          <Video
+            song={video.song}
+            channel={video.channel}
+            likes={video.likes}
+            description={video.description}
+            shares={video.shares}
+            messages={video.messages}
+            url="https://instagram.fada2-2.fna.fbcdn.net/v/t50.2886-16/116318243_114096520231264_5248633621650744716_n.mp4?_nc_ht=instagram.fada2-2.fna.fbcdn.net&_nc_cat=104&_nc_ohc=BpI_fioMdAkAX9dedjc&oe=5F58F106&oh=ae8d7b071c62516a1298c521effee8b1"
+          />
+        ))}
+      </div>
     </div>
   );
 }
